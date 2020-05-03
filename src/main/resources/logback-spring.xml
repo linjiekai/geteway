@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration  scan="true" scanPeriod="60 seconds" debug="false">
+
+    <springProfile name="dev">
+        <!--正式服的日志和jar文件同级，文件夹名logs-->
+        <property name="log.path" value="C:/logs/gateway" />
+    </springProfile>
+
+    <!--输出到控制台-->
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger{36} : [%L] - [%X{LOGGER_ID}] ====== %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!--输出到文件-->
+    <appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${log.path}/gateway-sys.log</file>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${log.path}/logzip/gateway-sys.%d{yyyy-MM-dd}-%i.log.zip</fileNamePattern>
+            <!--每10MB生成一个zip-->
+            <maxFileSize>10MB</maxFileSize>
+            <!--最多保留100个zip-->
+            <maxHistory>100</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger{36} : [%L] - [%X{LOGGER_ID}] ====== %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="errorFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${log.path}/gateway-error.log</file>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${log.path}/logzip/gateway-error.%d{yyyy-MM-dd}-%i.log.zip</fileNamePattern>
+            <maxFileSize>10MB</maxFileSize>
+            <maxHistory>100</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger{36} : [%L] - [%X{LOGGER_ID}] ====== %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="warnFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${log.path}/gateway-warn.log</file>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>WARN</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${log.path}/logzip/gateway-warn.%d{yyyy-MM-dd}-%i.log.zip</fileNamePattern>
+            <maxFileSize>10MB</maxFileSize>
+            <maxHistory>100</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger{36} : [%L] - [%X{LOGGER_ID}] ====== %msg%n</pattern>
+        </encoder>
+    </appender>
+
+
+    <appender name="infoFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${log.path}/gateway-info.log</file>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${log.path}/logzip/gateway-info.%d{yyyy-MM-dd}-%i.log.zip</fileNamePattern>
+            <maxFileSize>10MB</maxFileSize>
+            <maxHistory>100</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger{36} : [%L] - [%X{LOGGER_ID}] ====== %msg%n</pattern>
+        </encoder>
+    </appender>
+
+
+
+    <logger name="org.springframework" level="INFO" addtivity="false">
+        <appender-ref ref="console"/>
+        <appender-ref ref="file"/>
+    </logger>
+
+    <logger name="com.xfhl" level="ERROR" addtivity="false">
+        <appender-ref ref="console"/>
+        <appender-ref ref="errorFile"/>
+    </logger>
+
+    <logger name="com.xfhl" level="WARN" addtivity="false">
+        <appender-ref ref="console"/>
+        <appender-ref ref="warnFile"/>
+    </logger>
+
+    <logger name="com.xfhl" level="INFO" addtivity="false">
+        <appender-ref ref="console"/>
+        <appender-ref ref="infoFile"/>
+    </logger>
+
+</configuration>
